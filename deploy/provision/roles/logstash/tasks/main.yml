@@ -1,0 +1,11 @@
+---
+- include: repo.yml
+
+- name: install logstash
+  yum: name={{ item }} state=present
+  with_items:
+        - logstash
+
+- name: create logstash config
+  template: src=logstash.conf.j2 dest=/etc/logstash/conf.d/tala-logs.conf
+  notify: restart logstash

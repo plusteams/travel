@@ -1,0 +1,13 @@
+---
+# Ansible playbook for a TALA dev server
+
+- name: Tala Dev Machine
+  hosts: all
+  become: yes
+  become_user: root
+
+  roles:
+    - common
+    - nginx
+    - php
+    - npm

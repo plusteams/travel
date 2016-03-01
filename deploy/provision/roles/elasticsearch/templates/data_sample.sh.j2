@@ -1,0 +1,3 @@
+curl -XDELETE {{ ansible_ssh_host }}:9200/test/sample
+
+curl -XPUT {{ ansible_ssh_host }}:9200/test/sample/_bulk --data-binary '@/tmp/data_sample.json'

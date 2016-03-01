@@ -1,0 +1,20 @@
+- name: "Setup GPG keys for repositories"
+  copy: >
+    src="GPG-KEY-elasticsearch"
+    dest="/etc/pki/rpm-gpg"
+    owner=root
+    group=root
+    mode=0644
+  tags:
+    - repo
+
+- name: Import GPG key 
+  rpm_key: state=present key=/etc/pki/rpm-gpg/GPG-KEY-elasticsearch
+
+- name: "Setup Elasticsearch repo"
+  template: >
+    src=elasticsearch.repo.j2
+    dest=/etc/yum.repos.d/elasticsearch.repo
+  tags:
+    - repo
+

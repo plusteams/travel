@@ -1,0 +1,1029 @@
+{
+  "settings": {
+    "index": {
+      "number_of_shards": 5,
+      "number_of_replicas": 1
+    },
+    "analysis": {
+      "filter": {
+        "name_synonym_filter": {
+          "type": "synonym",
+          "expand": true,
+          "synonyms": [
+            "may tinh xach tay,laptop",
+            "bàn là,bàn ủi",
+            "onward,tiến bước",
+            "headphone,tai nghe",
+            "áo mưa,bao cao su,condom",
+            "tv,tivi,ti vi",
+            "5 centimet trên giây,5cm/s,5cm",
+            "canon,cannon",
+            "dau goi,dau goi dau",
+            "may say,may say toc"
+          ]
+        }
+      },
+      "analyzer": {
+        "name_analyzer": {
+          "tokenizer": "standard",
+          "filter": [
+            "standard",
+            "lowercase",
+            "snowball",
+            "name_synonym_filter"
+          ]
+        },
+        "unmarked_analyzer": {
+          "tokenizer": "standard",
+          "filter": [
+            "standard",
+            "lowercase",
+            "name_synonym_filter",
+            "asciifolding"
+          ]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "product": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "index": "not_analyzed",
+          "fields": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "category": {
+          "type": "nested",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "name": {
+              "type": "string",
+              "index": "not_analyzed"
+            },
+            "url_key": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "sku": {
+          "type": "string"
+        }
+      ,
+        "publication_date": {
+          "type": "string",
+          "index": "not_analyzed"
+        }
+      ,
+        "price": {
+          "type": "integer"
+        }
+      ,
+        "manufacturer": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "color": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "tax_class_id": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "custom_design": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "page_layout": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "options_container": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "enable_googlecheckout": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "gift_message_available": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "price_view": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "author": {
+          "type": "nested",
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "supplier": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "display_color": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "display_type": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "screen_size": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "resolution": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "manufacturer_electronics": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "manufacturer_book_vn": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "publisher_vn": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            },
+            "url_key": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "translated_by": {
+          "type": "nested",
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "is_recurring": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "material": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "origin": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "give_who": {
+          "type": "nested",
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "gift_occasion": {
+          "type": "nested",
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "manufacturers_gift": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "suppliers_gift": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "color_select": {
+          "type": "nested",
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "category_film": {
+          "type": "nested",
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "language": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "subtitles": {
+          "type": "nested",
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "notes": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "format": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "manufacturer_film": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "is_imported": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "size": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "singer": {
+          "type": "nested",
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "location_number": {
+          "type": "nested",
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "manufacturer_clother": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "suppliers_clother": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "kieu_dang": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "kieu_dang_gift": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "brand": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            },
+            "url_key": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "do_tuoi": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "theo_kieu": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "phong_cach": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "gioi_tinh": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "kieu_quan": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "kieu_dang_dam": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "kieu_ao": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "kieu_vay": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "diem_nhan": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "cpu": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "ram": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "dung_luong_dientu": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "chu_ky": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "operation_system": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "promotion": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "headphone_type": {
+          "type": "nested",
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "camera_type": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "device_compatibility": {
+          "type": "nested",
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "warranty_lifetime": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "number_of_speakers": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "mouse_type": {
+          "type": "nested",
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "keyboard_type": {
+          "type": "nested",
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "buyer": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "computer_accessory_type": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "network": {
+          "type": "nested",
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "data_connection": {
+          "type": "nested",
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "supplier_electronic": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "bao_sach_kho": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "skin_type": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "hair_type": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "capacity_select": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "supplier_beauty": {
+          "type": "nested",
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "vat": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "brand_country": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "baby_step": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "product_feature": {
+          "type": "nested",
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "version": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "unit": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "only_ship_to": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "is_free_gift": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "gioitinh": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "rma_status": {
+          "properties": {
+            "value": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ,
+        "searchable_name": {
+          "type": "string",
+          "index_analyzer": "name_analyzer",
+          "search_analyzer": "name_analyzer",
+          "fields": {
+            "unmarked": {
+              "type": "string",
+              "index_analyzer": "unmarked_analyzer",
+              "search_analyzer": "unmarked_analyzer"
+            }
+          }
+        }
+
+      ,
+        "searchable_sku": {
+          "type": "string",
+          "index_analyzer": "name_analyzer",
+          "search_analyzer": "name_analyzer",
+          "fields": {
+            "unmarked": {
+              "type": "string",
+              "index_analyzer": "unmarked_analyzer",
+              "search_analyzer": "unmarked_analyzer"
+            }
+          }
+        }
+
+      ,
+        "searchable_author": {
+          "type": "string",
+          "index_analyzer": "name_analyzer",
+          "search_analyzer": "name_analyzer",
+          "fields": {
+            "unmarked": {
+              "type": "string",
+              "index_analyzer": "unmarked_analyzer",
+              "search_analyzer": "unmarked_analyzer"
+            }
+          }
+        }
+
+      ,
+        "searchable_manufacturer_clother": {
+          "type": "string",
+          "index_analyzer": "name_analyzer",
+          "search_analyzer": "name_analyzer",
+          "fields": {
+            "unmarked": {
+              "type": "string",
+              "index_analyzer": "unmarked_analyzer",
+              "search_analyzer": "unmarked_analyzer"
+            }
+          }
+        }
+
+      ,
+        "searchable_brand": {
+          "type": "string",
+          "index_analyzer": "name_analyzer",
+          "search_analyzer": "name_analyzer",
+          "fields": {
+            "unmarked": {
+              "type": "string",
+              "index_analyzer": "unmarked_analyzer",
+              "search_analyzer": "unmarked_analyzer"
+            }
+          }
+        }
+
+      ,
+        "searchable_brand_country": {
+          "type": "string",
+          "index_analyzer": "name_analyzer",
+          "search_analyzer": "name_analyzer",
+          "fields": {
+            "unmarked": {
+              "type": "string",
+              "index_analyzer": "unmarked_analyzer",
+              "search_analyzer": "unmarked_analyzer"
+            }
+          }
+        }
+
+      ,
+        "searchable_baby_step": {
+          "type": "string",
+          "index_analyzer": "name_analyzer",
+          "search_analyzer": "name_analyzer",
+          "fields": {
+            "unmarked": {
+              "type": "string",
+              "index_analyzer": "unmarked_analyzer",
+              "search_analyzer": "unmarked_analyzer"
+            }
+          }
+        }
+
+      ,
+        "searchable_product_feature": {
+          "type": "string",
+          "index_analyzer": "name_analyzer",
+          "search_analyzer": "name_analyzer",
+          "fields": {
+            "unmarked": {
+              "type": "string",
+              "index_analyzer": "unmarked_analyzer",
+              "search_analyzer": "unmarked_analyzer"
+            }
+          }
+        }
+
+      ,
+        "searchable_version": {
+          "type": "string",
+          "index_analyzer": "name_analyzer",
+          "search_analyzer": "name_analyzer",
+          "fields": {
+            "unmarked": {
+              "type": "string",
+              "index_analyzer": "unmarked_analyzer",
+              "search_analyzer": "unmarked_analyzer"
+            }
+          }
+        }
+
+      ,
+        "searchable_support_p24h": {
+          "type": "string",
+          "index_analyzer": "name_analyzer",
+          "search_analyzer": "name_analyzer",
+          "fields": {
+            "unmarked": {
+              "type": "string",
+              "index_analyzer": "unmarked_analyzer",
+              "search_analyzer": "unmarked_analyzer"
+            }
+          }
+        }
+
+      ,
+        "searchable_miki_price": {
+          "type": "string",
+          "index_analyzer": "name_analyzer",
+          "search_analyzer": "name_analyzer",
+          "fields": {
+            "unmarked": {
+              "type": "string",
+              "index_analyzer": "unmarked_analyzer",
+              "search_analyzer": "unmarked_analyzer"
+            }
+          }
+        }
+
+      }
+    }
+  }
+}

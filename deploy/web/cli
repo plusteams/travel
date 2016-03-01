@@ -1,0 +1,218 @@
+#!/bin/bash
+
+dir=$(pwd)
+if [[ "$dir" = *"scripts/vagrant"* ]]; then
+    currentPath="$dir"
+else 
+    currentPath="$dir/scripts/vagrant/web"
+fi
+cd $currentPath
+
+if [ $# -eq 0 ]
+    then
+        echo -e "No arguments supplied! Supported arguments: ,
+        * init
+        * grunt
+        * grunt less
+        * grunt requirejs
+        * composer install
+        * composer update
+        * env [environment]
+        * vagrant [up|reload|halt|provision|update]
+        * ngrok [domain]
+        "
+else
+    if [ "$1" == "init" ]; then
+        # Requirement
+        which vagrant > /dev/null 2>&1 || { echo "Vagrant is required. Aborting." >&2; exit 1; }
+        which ansible > /dev/null 2>&1 || { echo "Ansible is required. Aborting." >&2; exit 1; }
+
+        echo 'Please enter your machine ID (only characters, numbers, underscore and dot are allowed): ';
+        read id;
+        cd ../../..;
+        sed -e "s/%client_id%/$id/g" config/local.php_dev > config/local.php;
+        sed -e "s/%client_id%/$id/g" applications/frontend/config/local.php_dev > applications/frontend/config/local.php;
+        sed -e "s/%client_id%/$id/g" applications/backend/config/local.php_dev > applications/backend/config/local.php;
+        sed -e "s/%client_id%/$id/g" applications/api/config/local.php_dev > applications/api/local.php;
+
+	    cd scripts/vagrant/web;
+        vagrant plugin install vagrant-vbguest
+        vagrant up --provision
+
+        vagrant ssh -c "
+            cd /tiki/www/tala;
+            sudo curl -sS https://getcomposer.org/installer | php;
+            sudo /usr/bin/php /tiki/www/tala/composer.phar install;
+            cd webroot/frontend/assets/tools;
+            sudo npm install --no-bin-links;
+	    echo DONE;
+        "
+    elif [ "$1" == "cli" ]; then
+        vagrant ssh -c "
+            cd /tiki/www/tala;
+            ./cli ${@:2};
+        "
+    elif [ "$1" == "vagrant" ]; then
+        vagrant $2;
+    elif [ "$1" == "grunt" -a "$2" == "requirejs" ]; then
+        if [ "$3" != "" ]; then
+            vagrant ssh -c "
+                cd /tiki/www/tala/webroot/frontend/assets/events/$3/tools;
+                grunt requirejs --force
+            "
+        else
+            vagrant ssh -c "
+                cd /tiki/www/tala/webroot/frontend/assets/tools;
+                grunt requirejs --force
+            "
+        fi
+    elif [ "$1" == "grunt" -a "$2" == "less" ]; then
+        if [ "$3" != "" ]; then
+            vagrant ssh -c "
+                cd /tiki/www/tala/webroot/frontend/assets/events/$3/tools;
+                grunt less --force
+            "
+        else
+            vagrant ssh -c "
+                cd /tiki/www/tala/webroot/frontend/assets/tools;
+                grunt less --force
+            "
+        fi
+    elif [ "$1" == "grunt" ]; then
+        # ./cli grunt 7-ngay-nem-tao
+        if [ "$2" != "" ]; then
+            vagrant ssh -c "
+                cd /tiki/www/tala/webroot/frontend/assets/events/$2/tools;
+                grunt
+            ";
+        else
+            vagrant ssh -c "
+                cd /tiki/www/tala/webroot/frontend/assets/tools;
+                grunt requirejs --force;
+                grunt less --force
+            ";
+        fi
+    elif [ "$1" == "composer" -a "$2" == "install" ]; then
+        vagrant ssh -c "
+            cd /tiki/www/tala;
+            /usr/bin/php /tiki/www/tala/composer.phar install;
+        "
+    elif [ "$1" == "composer" -a "$2" == "update" ]; then
+        vagrant ssh -c "
+            cd /tiki/www/tala;
+            /usr/bin/php /tiki/www/tala/composer.phar self-update;
+            /usr/bin/php /tiki/www/tala/composer.phar update;
+        "
+    elif [ "$1" == "vagrant" -a "$2" == "update" ]; then
+        cd ..
+        if vagrant box outdated | grep -q 'newer version'; then
+            while true; do
+                echo "The current Vagrant environments will be destroyed and recreated."
+                echo "Are you sure to do this? [y/N]"
+                read yn
+                case $yn in
+                    [Yy]* ) vagrant box update; vagrant destroy -f; vagrant init tiki/taladev -f; vagrant up; vagrant provision; echo DONE; break;;
+                    [Nn]* ) exit;;
+                    * ) echo "Please answer yes or no.";;
+                esac
+            done
+        else
+            echo "Your box is up to date!"
+        fi
+
+        cd tala;
+
+    elif [ "$1" == "vagrant" -a "$2" == "rebuild" ]; then
+        vagrant box update;
+        vagrant destroy -f;
+        ./cli init;
+
+    elif [ "$1" == "env" ]; then
+        if [ "$2" == "production" -o "$2" == "development" -o "$2" == "test" ]; then
+            vagrant ssh -c "
+                cd /tiki/www/tala/scripts/vagrant/provision/roles/nginx/files/vhosts;
+                sed -i 's/fastcgi_param * APPLICATION_ENV .*/fastcgi_param  APPLICATION_ENV $2;/g' *.conf;
+                sudo systemctl restart nginx.service;
+                echo "DONE"
+            ";
+        else
+            echo "Env is not supported. Available options: production | development | test"
+        fi
+
+    # ./cli ngrok mac tala.xyz
+    elif [ "$1" == "ngrok" ]; then
+        cd ../provision/roles/ngrok/files/
+        if [ "$( uname -s )" == "Linux" ]; then
+            ./ngrok-linux http $2:80 --host-header $2
+        elif [ "$( uname -s )" == "Darwin" ]; then
+            ./ngrok-mac http $2:80 --host-header $2
+        else
+            echo "Argument is not supported"
+        fi
+
+    elif [ "$1" == "deploy" ]; then
+        if [ -z "$3" ]; then
+            branch=$(git rev-parse --abbrev-ref HEAD)
+        else
+            branch=$3
+        fi
+        
+        username=$(whoami)
+        version="nvms_$(date +%Y%m%d%H%M%S)"
+
+        ssh tala@10.20.30.48 -i ../../../scripts/deployment/staging/tala.pem "
+            echo "Enter directory /data/www/tala/$2"
+            cd /data/www/tala/$2
+
+            echo "Checkout branch $branch..."
+            git fetch origin
+            git reset --hard origin/$branch
+            git checkout -f $branch
+            git pull
+
+            echo "Compressing js + css..."
+            cd webroot/frontend/assets/tools
+            grunt less --force
+            grunt requirejs --force
+
+            echo "Updating assets version..."
+            sed -i 's/nvms_.*/$version'\''/g' /data/www/tala/$2/config/local.php
+
+            echo "Done, $2 is deployed successfully"
+            echo "Branch: $branch"
+
+            cd /data/www/tala/$2
+            rm -f release.txt
+            echo "$2" >> release.txt
+            echo "$branch" >> release.txt
+            echo "$username" >> release.txt
+        "
+
+    elif [ "$1" == "destroy" ]; then
+            ssh tala@10.20.30.48 -i ../../../scripts/deployment/staging/tala.pem "
+            cd /data/www/tala/
+            sudo rm -rf $2
+            cp -R base $2
+            cd /data/www/tala/$2
+            chmod -R 777 var
+            sed -i 's/boxid/$2/g' config/local.php
+            echo "Destroy box successfully"
+        "
+    elif [ "$1" == "release" ]; then
+            ssh tala@10.20.30.48 -i ../../../scripts/deployment/staging/tala.pem "
+            cd /data/www/tala/$2
+            rm -f release.txt
+            echo "Release $2 successfully"
+        "
+    elif [ "$1" == "deploy" -o "$1" == "release"  -o "$1" == "destroy" ]; then
+        branch=$(git rev-parse --abbrev-ref HEAD)
+        username=$(whoami)
+
+        ssh tala@10.20.30.48 -i ../../../scripts/deployment/staging/tala.pem "
+            cd /data/www/tala/base/scripts/deployment/staging;
+            php box.php $1 $2 $branch
+        ";
+    else
+        echo "Argument is not supported"
+    fi
+fi

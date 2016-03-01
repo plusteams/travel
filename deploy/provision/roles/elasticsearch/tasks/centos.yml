@@ -1,0 +1,56 @@
+- include: repo.yml
+
+- name: "Install Elasticsearch and its dependencies"
+  yum: >
+    name={{ item }}
+    state=present
+  with_items:
+    - java-1.7.0-openjdk
+    - mysql-connector-java
+    - elasticsearch
+  tags:
+    - repos
+  notify:
+    - Restart ElasticSearch
+
+- name: "Configure Elasticsearch to automatically start during bootup"
+  service:
+    name=elasticsearch
+    enabled=yes
+  tags:
+    - config
+
+- name: "Upload logrotate config"
+  template: >
+    src=logrotate.j2
+    dest=/etc/logrotate.d/elasticsearch
+  tags:
+    - config
+
+- name: "Install ElasticSearch plugins"
+  shell: |
+    chdir=/usr/share/elasticsearch
+    creates=/usr/share/elasticsearch/plugins/{{ item.dest }}
+    
+    bin/plugin {{ item.url|default() }} -install {{ item.src }}
+  with_items:
+    - src: lmenezes/elasticsearch-kopf/master
+      dest: kopf
+    - src: elasticsearch/marvel/latest
+      dest: marvel
+    - src: com.github.richardwilly98.elasticsearch/elasticsearch-river-mongodb/2.0.9
+      dest: river-mongodb
+    - url: --url http://bit.ly/1dKqNJy
+      src: river-jdbc
+      dest: river-jdbc
+    - url: --url https://dl.dropboxusercontent.com/u/1598491/elasticsearch-analysis-vietnamese-0.1.7.zip
+      src: analysis-vietnamese
+      dest: analysis-vietnamese
+  tags:
+    - elasticsearch
+    - plugins
+
+- name: "Config MySQL Connector for river-jdbc"
+  file: path=/usr/share/elasticsearch/lib/mysql-connector-java.jar
+      src=/usr/share/java/mysql-connector-java.jar 
+      state=link

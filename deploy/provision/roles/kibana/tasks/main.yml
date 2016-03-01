@@ -1,0 +1,36 @@
+---
+- name: Create service account for Kibana
+  user: name=kibana
+        system=yes
+        home=/var/lib/kibana
+        shell=/bin/false
+        state=present
+
+- name: Download Kibana
+  get_url: url=https://download.elasticsearch.org/kibana/kibana/kibana-{{ kibana_version }}-{{ kibana_os }}-{{ kibana_arch }}.zip
+           dest=/usr/local/src/kibana-{{ kibana_version }}-{{ kibana_os }}-{{ kibana_arch }}.zip
+
+- name: Extract and install Kibana
+  unarchive: src=/usr/local/src/kibana-{{ kibana_version }}-{{ kibana_os }}-{{ kibana_arch }}.zip
+             dest={{ kibana_dir }}
+             copy=no
+             creates={{ kibana_dir }}/kibana-{{ kibana_version }}-{{ kibana_os }}-{{ kibana_arch }}
+
+- name: Configure Kibana
+  template: src=kibana.yml.j2
+            dest={{ kibana_dir }}/kibana-{{ kibana_version }}-{{ kibana_os }}-{{ kibana_arch }}/config/kibana.yml
+  notify:
+    - Restart Kibana
+
+- name: Configure Kibana service definition
+  template: src=kibana.init.j2 dest=/etc/init.d/kibana mode=0744
+  notify:
+    - Restart Kibana
+
+- name: Configure Kibana default definition
+  template: src=kibana.default.j2 dest=/etc/default/kibana
+  notify:
+    - Restart Kibana
+
+- name: Configure Kibana log rotation
+  template: src=logrotate_kibana.j2 dest=/etc/logrotate.d/kibana

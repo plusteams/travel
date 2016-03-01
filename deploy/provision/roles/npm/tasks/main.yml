@@ -1,0 +1,7 @@
+---
+- name: install npm
+  yum: name=npm state=present
+ 
+- name: install grunt
+  command: "npm install -g bower grunt-cli"
+  sudo: yes

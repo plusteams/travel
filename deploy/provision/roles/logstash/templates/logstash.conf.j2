@@ -1,0 +1,21 @@
+input {
+  redis {
+    host => '127.0.0.1'
+    key => talalogs
+    data_type => ['list']
+  }
+}
+
+filter {
+  grok {
+    match => {"message" => "\[%{TIMESTAMP_ISO8601:datetime}\]%{SPACE}logstash.%{LOGLEVEL:level}:%{SPACE}%{GREEDYDATA:data}%{SPACE}app=%{GREEDYDATA:app}%{SPACE}tag=%{GREEDYDATA:tag}%{SPACE}\[\]%{SPACE}\[\]%{SPACE}"}
+  }
+}
+
+output {
+  elasticsearch {
+    host => "127.0.0.1"
+    index => "logstash-dev"
+  }
+  stdout { codec => rubydebug }
+}

@@ -1,0 +1,26 @@
+---
+- name: install nginx
+  yum: name=nginx state=present
+  
+- name: Copy vhosts config
+  copy: src={{ item }} dest=/etc/nginx/conf.d/ force=yes
+  with_fileglob:
+    - ../files/vhosts/*
+    
+- name: Copy nginx config
+  copy: src=../files/nginx.conf dest=/etc/nginx/ force=yes
+
+- name: Copy ssl certificate
+  copy: src={{ item }} dest=/home/vagrant/ force=yes
+  with_fileglob:
+    - ../files/*.pem
+
+- name: be sure nginx is running and enabled
+  service: name=nginx state=running enabled=yes
+  tags: nginx
+
+- name: make root directory
+  file: path=/tiki/www/tala state=directory
+  
+  notify:
+      - restart nginx

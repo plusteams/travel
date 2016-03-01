@@ -1,0 +1,47 @@
+---
+- name: install php-fpm and extensions
+  yum: name={{ item }} state=present
+  with_items:
+        - phpw70-pecl-zip
+        - phpw70-xml
+        - phpw70-pecl-igbinary
+        - phpw70-phalcon
+        - phpw70-pecl-memcache
+        - phpw70-pecl-mongo
+        - phpw70-pecl-xdebug
+        - phpw70-pecl-jsonc
+        - phpw70-cli
+        - phpw70-pdo
+        - phpw70-pear
+        - phpw70-pecl-jsonc-devel
+        - phpw70-intl
+        - phpw70-pecl-redis
+        - phpw70-pecl-xhprof
+        - phpw70-mysqlnd
+        - phpw70
+        - phpw70-mbstring
+        - phpw70-xcache
+        - phpw70-gd
+        - phpw70-fpm
+        - phpw70-common
+        - phpw70-process
+        - phpw70-devel
+        - phpw70-pecl-gearman
+        - phpw70-xmlrpc
+        - phpw70-mcrypt
+        - phpw70-soap
+        - phpw70-pecl-xhprof
+
+- name: Copy php.ini configuration
+  template: src=../files/php.ini dest=/etc/
+
+- name: Copy php-fpm configuration
+  template: src=../files/www.conf dest=/etc/php-fpm.d/
+  notify: restart php-fpm
+
+- name: chown session directory
+  shell: chown nginx:nginx /var/lib/php/session
+
+- name: be sure php-fpm is running and enabled
+  service: name=php-fpm state=running enabled=yes
+  tags: php-fpm

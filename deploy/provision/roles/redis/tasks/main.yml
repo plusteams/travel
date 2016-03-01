@@ -1,0 +1,13 @@
+---
+
+- name: Install redis 
+  yum: name=redis state=latest
+
+- name: Copy redis configuration
+  template: src=redis.conf dest=/etc/redis.conf
+  notify: restart redis
+
+- name: Be make sure redis is running and enabled
+  service: name=redis state=running enabled=yes
+  tags: redis
+

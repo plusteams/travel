@@ -1,0 +1,41 @@
+curl -XPUT '192.168.33.13:9200/test/product/_meta' -d '{
+    "type" : "jdbc",
+    "jdbc" : {
+        "url" : "jdbc:mysql://192.168.33.1:3306/test",
+        "user" : "dev",
+        "password" : "123456",
+        "sql" : "select *, id AS _id from product"
+    }
+}'
+
+curl -XGET '192.168.33.13:9200/jdbc/_search?pretty&q=*'
+
+
+curl -XPUT '192.168.33.13:9200/_river/jdbc_river/_meta' -d '{
+    "type" : "jdbc",
+    "jdbc" : {
+        "url" : "jdbc:mysql://192.168.33.1:3306/test",
+        "user" : "dev",
+        "password" : "123456",
+        "sql" : "select *, id AS _id from product",
+        "index" : "test",
+        "type" : "product"
+    }
+}'
+
+
+curl --noproxy -xPUT http://192.168.33.13:9200/_river/jdbc_river/_meta -d '{
+    "type" : "jdbc",
+    "jdbc" : {
+        "driver" : "com.mysql.jdbc.Driver",
+        "url" : "jdbc:mysql://192.168.33.1:3306/test",
+        "user" : "dev",
+        "password" : "123456",
+        "sql" : "select *, id AS _id from product",
+        "index" : "test",
+        "type" : "product"
+        "bulk_size" : 1000,
+        "max_bulk_requests" : 50,
+        "bulk_flush_interval" : "10s"
+    }
+}'

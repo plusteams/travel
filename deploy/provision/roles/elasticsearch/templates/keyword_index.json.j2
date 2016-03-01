@@ -1,0 +1,32 @@
+{
+  "settings": {
+    "index": {
+      "number_of_shards": 5,
+      "number_of_replicas": 1
+    },
+    "analysis": {
+      "analyzer": {
+        "analyzer_startswith": {
+          "tokenizer": "keyword",
+          "filter": [
+            "standard",
+            "lowercase",
+            "asciifolding"
+          ]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "keyword": {
+      "properties": {
+        "keyword_suggest": {
+          "type": "completion",
+          "index_analyzer": "analyzer_startswith",
+          "search_analyzer": "analyzer_startswith",
+          "payloads": true
+        }
+      }
+    }
+  }
+}

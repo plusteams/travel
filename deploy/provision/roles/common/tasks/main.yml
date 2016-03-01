@@ -1,0 +1,73 @@
+---
+
+# insert nameserver dns
+#
+- name: insert nameserver /etc/resolv.conf
+  lineinfile: dest=/etc/resolv.conf state=present regexp='nameserver 8.8.8.8' line='nameserver 8.8.8.8'
+
+# EPEL repo
+- name: Copy the EPEL repository definition
+  copy: src=epel-release-7-5.noarch.rpm dest=/tmp/epel-release-7-5.noarch.rpm
+
+- name: Install EPEL repo
+  yum: name=/tmp/epel-release-7-5.noarch.rpm state=present
+  
+
+- name: Copy the PHP 7 repository definition
+  copy: src=webtatic-release.rpm dest=/tmp/webtatic-release.rpm
+  
+- name: Install PHP 7  repo
+  yum: name=/tmp/epel-release-7-5.noarch.rpm state=present
+
+- name: Import GPG key for EPEL
+  rpm_key: state=present key=/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7 
+
+# REMI repo
+- name: Copy remi repo
+  copy: src=remi-release-7.rpm dest=/tmp/remi-release-7.rpm
+
+- name: Install remi repo
+  yum: name=/tmp/remi-release-7.rpm state=present
+
+- name: Import GPG key for remi
+  rpm_key: state=present key=/etc/pki/rpm-gpg/RPM-GPG-KEY-remi
+
+- name: Override remi.repo
+  copy: src=remi7.repo  dest=/etc/yum.repos.d/remi.repo
+
+- name: Nginx repo
+  copy: src=nginx.repo  dest=/etc/yum.repos.d/nginx.repo
+
+- name: Disable SELinux
+  selinux: state=disabled
+
+- name: Disable firewalld
+  service: name=firewalld enabled=no state=stopped
+
+- name: Clear repo
+  shell: yum clean all
+
+- name: "Install utils: vim, wget, telnet, htop, ntpdate"
+  yum: >
+    name={{ item }}
+    state=present
+  with_items:
+    - vim
+    - wget
+    - htop
+    - ntpdate
+    - telnet
+    - unzip
+
+- name: update timezone HCM
+  command: /bin/timedatectl set-timezone Asia/Ho_Chi_Minh
+
+- name: update time system
+  command: /sbin/ntpdate pool.ntp.org
+
+- name: update locale
+  lineinfile: dest=/etc/environment
+    regexp=''
+    insertafter=EOF
+    line='LANG=en_US.UTF-8\nLC_ALL=en_US.UTF-8'
+    create=true
