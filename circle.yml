@@ -24,7 +24,7 @@ machine:
   services:
     - mysql
     - mongodb
-    - redis
+    #- redis
 
 ## Customize dependencies
 dependencies:
@@ -32,7 +32,7 @@ dependencies:
   #    - elasticsearch-1.5.2 # relative to the build directory
   pre:
     - printf "\n" | pecl install mongodb-beta
-    - printf "\n" | pecl install redis
+    #- printf "\n" | pecl install redis
     - sed -i 's/^;//' ~/.phpenv/versions/$(phpenv global)/etc/conf.d/xdebug.ini
     - cp parameters.yml.dist parameters.yml
   override:
