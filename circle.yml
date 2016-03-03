@@ -1,0 +1,53 @@
+## General
+general:
+  branches:
+    only:
+      - master
+      - dev
+
+## Experimental
+
+experimental:
+  notify:
+    branches:
+      only:
+        - master
+        - dev
+
+## Customize the test machine
+machine:
+  php:
+      version: 5.6.14
+  timezone:
+    Asia/Ho_Chi_Minh
+  environment:
+  services:
+    - mysql
+    - mongodb
+    #- redis
+
+## Customize dependencies
+dependencies:
+  #cache_directories:
+  #    - elasticsearch-1.5.2 # relative to the build directory
+  pre:
+    - printf "\n" | pecl install mongodb
+    #- printf "\n" | pecl install redis
+    - sed -i 's/^;//' ~/.phpenv/versions/$(phpenv global)/etc/conf.d/xdebug.ini
+    - cp app/config/parameters.yml.dist app/config/parameters.yml
+  override:
+    - composer install --no-interaction --optimize-autoloader --prefer-source
+  #post:
+   # - if [[ ! -e elasticsearch-1.5.2 ]]; then wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.5.2.tar.gz && tar -xvf elasticsearch-1.5.2.tar.gz; fi
+   # - elasticsearch-1.5.2/bin/elasticsearch: { background: true }
+   # - sleep 5
+
+## Customize test commands
+test:
+  pre:
+    - mkdir -p build/logs
+  override:
+    - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+    - vendor/bin/phpcs --standard=PSR2 --encoding=utf-8 -n -p src
+  post:
+    - vendor/bin/coveralls -v --coverage_clover=build/logs/clover.xml
