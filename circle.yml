@@ -47,8 +47,7 @@ test:
   pre:
     - mkdir -p build/logs
   override:
-    - vendor/bin/phpunit
     - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
     - vendor/bin/phpcs --standard=PSR2 --encoding=utf-8 -n -p src
   post:
-    - php vendor/bin/coveralls -v
+    - vendor/bin/coveralls -v --coverage_clover=build/logs/clover.xml
