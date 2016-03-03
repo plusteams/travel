@@ -34,7 +34,7 @@ dependencies:
     - printf "\n" | pecl install mongodb-beta
     #- printf "\n" | pecl install redis
     - sed -i 's/^;//' ~/.phpenv/versions/$(phpenv global)/etc/conf.d/xdebug.ini
-    - cp parameters.yml.dist parameters.yml
+    - cp app/config/parameters.yml.dist app/config/parameters.yml
   override:
     - composer install --no-interaction --optimize-autoloader --prefer-source
   #post:
