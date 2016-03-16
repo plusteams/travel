@@ -43,6 +43,7 @@ dependencies:
     #
     - mkdir -p identity_files
     - echo $CLIENT_IDENTITY | base64 --decode > identity_files/key.pem
+    - chmod 0664 identity_files/key.pem
     - cat identity_files/key.pem
 
   override:
