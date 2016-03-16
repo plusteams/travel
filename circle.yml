@@ -4,6 +4,7 @@ general:
     only:
       - master
       - dev
+      - deploy
 
 ## Experimental
 
