@@ -66,7 +66,7 @@ deployment:
   staging:
     branch: deploy
     commands: 
-      - ssh -i identity_files/key.pem $USER@$HOST $deploy/scripts/deploy -e dev
+      - ssh -i identity_files/key.pem $USER@$HOST deploy/scripts/deploy -e dev
   production:
     branch: master
     commands: 
