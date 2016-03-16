@@ -63,9 +63,9 @@ test:
     - vendor/bin/coveralls -v --coverage_clover=build/logs/clover.xml
 deployment:
   staging:
-    branch: dev
+    branch: deploy
     commands: 
-      - deploy/scripts/deploy -e dev -i ${HOME}/identity_files/key.pem
+      - ssh -i identity_files/key.pem $USER@$HOST $deploy/scripts/deploy -e dev
   production:
     branch: master
     commands: 

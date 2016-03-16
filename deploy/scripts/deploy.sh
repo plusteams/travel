@@ -7,6 +7,10 @@
 #
 source ./autoload.sh
 ## Checking root access
+
+echo "test" > ok.text
+
+
 checkRootAccess
 if [ $? = 1 ]; then
 	echo "OK"
