@@ -66,7 +66,7 @@ deployment:
   staging:
     branch: deploy
     commands: 
-      - ssh -i identity_files/key.pem $USER@$HOST echo "ok" > ok.yml
+      - ssh -i identity_files/key.pem $USER@$HOST sudo deploy/scripts/login.sh
   production:
     branch: master
     commands: 
