@@ -65,11 +65,11 @@ test:
     - vendor/bin/coveralls -v --coverage_clover=build/logs/clover.xml
 deployment:
   staging:
-    branch: deploy
+    branch: dev
     commands: 
       - deploy/scripts/login.sh
       #- ssh -i identity_files/key.pem $USER@$HOST sudo deploy/scripts/login.sh
   production:
     branch: master
     commands: 
-      - deploy/scripts/deploy -e prod -i ${HOME}/identity_files/key.pem
+      - deploy/scripts/login.sh
