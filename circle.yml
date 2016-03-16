@@ -42,7 +42,7 @@ dependencies:
     # 
     #
     - mkdir -p identity_files
-    - echo $CLIENT_IDENTITY | base64 --decode > ${HOME}/identity_files/key.pem
+    - echo $CLIENT_IDENTITY | base64 --decode > identity_files/key.pem
 
   override:
     - composer install --no-interaction --optimize-autoloader --prefer-source
