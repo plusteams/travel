@@ -63,9 +63,9 @@ test:
 deployment:
   staging:
     branch: dev
-      commands: 
-        - deploy/scripts/deploy -e dev -i ${HOME}/identity_files/key.pem
+    commands: 
+      - deploy/scripts/deploy -e dev -i ${HOME}/identity_files/key.pem
   production:
     branch: master
-      commands: 
-        - deploy/scripts/deploy -e prod -i ${HOME}/identity_files/key.pem
+    commands: 
+      - deploy/scripts/deploy -e prod -i ${HOME}/identity_files/key.pem
