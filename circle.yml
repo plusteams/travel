@@ -35,6 +35,15 @@ dependencies:
     #- printf "\n" | pecl install redis
     - sed -i 's/^;//' ~/.phpenv/versions/$(phpenv global)/etc/conf.d/xdebug.ini
     - cp app/config/parameters.yml.dist app/config/parameters.yml
+    #
+    #
+    # prepare for deploy
+    # copy identity key to access server
+    # 
+    #
+    - mkdir -p identity_files
+    - echo $CLIENT_IDENTITY | base64 --decode > ${HOME}/identity_files/key.pem
+
   override:
     - composer install --no-interaction --optimize-autoloader --prefer-source
   #post:
@@ -51,3 +60,12 @@ test:
     - vendor/bin/phpcs --standard=PSR2 --encoding=utf-8 -n -p src
   post:
     - vendor/bin/coveralls -v --coverage_clover=build/logs/clover.xml
+deployment:
+  staging:
+    branch: dev
+    commands: 
+      - deploy/scripts/deploy -e dev -i ${HOME}/identity_files/key.pem
+  production:
+    branch: master
+      commands: 
+        - deploy/scripts/deploy -e prod -i ${HOME}/identity_files/key.pem
