@@ -3,7 +3,7 @@
 #
 #
 #
-ssh $USER@$HOST <<EOF 
+ssh -i identity_files/key.pem $USER@$HOST <<EOF 
 if [ /travel/wwww/travel ]; then
 	echo "dir not found, create new folder";
 	sudo -i mkdir -p /travel/wwww;
