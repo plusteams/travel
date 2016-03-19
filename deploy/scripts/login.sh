@@ -16,6 +16,7 @@ if [ /travel/wwww/travel ]; then
 fi
 cd travel;
 sudo git checkout dev;
+sudo git pull;
 sudo chmod a+x deploy/scripts/deploy.sh
 sudo deploy/scripts/deploy.sh nginx
 EOF
