@@ -5,6 +5,8 @@
 #
 #
 #
+dir=`pwd`;
+cd $dir/deploy/scripts;
 source ./autoload.sh
 ## Checking root access
 checkRootAccess
@@ -28,3 +30,4 @@ for i in "$@"; do
 	echo "Call " $arg;
 	eval ${arg};
 done
+cd $dir;
