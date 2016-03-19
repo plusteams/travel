@@ -5,36 +5,29 @@
 #
 #
 #
+dir=`pwd`;
+cd $dir/deploy/scripts;
 source ./autoload.sh
 ## Checking root access
-
-echo "test" > ok.text
-
-
 checkRootAccess
-if [ $? = 1 ]; then
-	echo "OK"
-else
-	echo "root acess is required"
-	exit 1;
-fi
+success "Root access check";
 
-###########
-# Checking nginx 
+##########################
 #
-#############
+# call function with arg name: doArgxxxx,
+# to write function doArgxxx please write library to deploy it. 
+# All in one libs file with argxxx.sh name
+# Ex: nginx will be install with deploy.sh nginx
+#
+# and in libs file existed nginx.sh libs/nginx.sh
+# and finally write doNginx to call out
+#
 
-if ! which nginx > /dev/null 2>&1; then
-    echo "Nginx not installed"
-    #call script install nginx and config nginx
-	#installNginx
-else
-	##Do some things 
-	#TODO
-	# checking config or override config site
- 	#
- 	installNginx
- 	#getCodeName
- 	echo "config nginx"
-fi
-
+for i in "$@"; do
+	#statements
+	echo "Call do for deploy";
+	arg="do$(tr '[:lower:]' '[:upper:]do' <<< ${i:0:1})${i:1}";
+	echo "Call " $arg;
+	eval ${arg};
+done
+cd $dir;
