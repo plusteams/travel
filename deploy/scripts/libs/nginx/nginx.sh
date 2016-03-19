@@ -5,26 +5,86 @@
 #
 #
 #
+
+
+###########################
+#
+#
+# Do nginx function
+#
+#
+
+
+doNginx()
+{
+	installNginx;
+	configNginx;
+	nginxService restart;
+}
+
+######################
+#
+# INSTALL NGINX
+#
+#######################
+
+
 installNginx ()
 {
-	addRepoKey
+	if ! which nginx > /dev/null 2>&1; then
+    	echo "Nginx not installed"
+    	#call script install nginx and config nginx
+	
+		addRepoKey
 
-	if [ $? = 1 ]; then
-		getCodeName
-	else
-		export DISTRIB_CODENAME=trusty
-	fi
+		if [ $? = 1 ]; then
+			getCodeName
+		else
+			export DISTRIB_CODENAME=trusty
+		fi
 
-	echo "code name $DISTRIB_CODENAME"; 
-	addSourceFile
-	if [ $? = 1 ]; then
-		apt-get update;
-		app-get install nginx;
+		echo "code name $DISTRIB_CODENAME"; 
+		addSourceFile
+		if [ $? = 1 ]; then
+			sudo apt-get update;
+			sudo app-get -y install nginx;
+		fi
 	fi
 
 }
 
-## add repo key
+################################
+#
+#
+# CONFIG NGINX
+#
+###################################
+
+configNginx()
+{
+	#
+	# override nginx.conf file 
+	#
+	if [ ! $files_dir = "" ]; then
+		cp $files_dir/config/nginx/nginx.conf /etc/nginx/nginx.conf;
+		cp $files_dir/config/nginx/vhost/* /etc/nginx/vhost/;
+		echo "coppy nginx config ok";
+		return 1
+	else
+		echo "Fail to add config";
+		return 0
+	fi
+
+}
+
+#################################
+#
+# private function
+#
+# add repo key
+#
+#
+#
 addRepoKey ()
 {
 	if [ ! $files_dir = "" ]; then
@@ -37,6 +97,11 @@ addRepoKey ()
 	fi
 }
 
+##################
+#
+# Get code name of os version: ex: ubuntu trusty
+#
+#
 getCodeName () 
 {
 	if ! /etc/lsb-release > /dev/null 2>&1; then
@@ -45,6 +110,11 @@ getCodeName ()
 	fi
 }
 
+#####################
+# Private function
+# Add source file
+# 
+###########
 addSourceFile ()
 {
 	if [ -f /etc/apt/sources.list ]; then
@@ -59,3 +129,9 @@ addSourceFile ()
 	fi
 	return 0;
 }
+
+nginxService()
+{
+	sudo service nginx $1
+}
+
