@@ -1,11 +1,5 @@
 #!/bin/bash
 #
-#
-#
-#
-#
-#
-
 
 ###########################
 #
@@ -18,8 +12,10 @@
 doNginx()
 {
 	installNginx;
-	configNginx;
-	nginxService restart;
+	if [ $? = 1 ]; then
+		configNginx;	
+		nginxService restart;
+	fi
 }
 
 ######################
@@ -49,7 +45,9 @@ installNginx ()
 			sudo apt-get update;
 			sudo app-get -y install nginx;
 		fi
+		return 1;
 	fi
+	return 1;
 
 }
 
@@ -67,7 +65,8 @@ configNginx()
 	#
 	if [ ! $files_dir = "" ]; then
 		cp $files_dir/config/nginx/nginx.conf /etc/nginx/nginx.conf;
-		cp $files_dir/config/nginx/vhost/* /etc/nginx/vhost/;
+		cp $files_dir/config/nginx/vhost/server-*.conf /etc/nginx/site-available/;
+		ln -s /etc/nginx/sites-aavailable/server-*.conf /etc/nginx/sites-enabled/;
 		echo "coppy nginx config ok";
 		return 1
 	else
@@ -134,4 +133,3 @@ nginxService()
 {
 	sudo service nginx $1
 }
-
