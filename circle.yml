@@ -22,7 +22,7 @@ machine:
     Asia/Ho_Chi_Minh
   environment:
   services:
-    - nginx
+    #- nginx
     - mysql
     - mongodb
     #- redis
