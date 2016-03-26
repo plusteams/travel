@@ -64,6 +64,6 @@ Add an entry for your Ubuntu operating system.
 ##### 4. Mysql (is option, We will use mongodb or build docker images include mysql service)
 
 #### 3 How to start project
-* All you need is run this command after install all of above
+All you need is run this command after install all of above
 
 	docker run --name travel-project  -d  -v `pwd`:/travel/www/travel_dev plusteam/xxxx
