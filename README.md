@@ -12,15 +12,17 @@ This working well in linux system. You can get it in Mac OS (window need to be v
 
 ### Getting started
 #### 1. System requirement 
-	- docker
-	- mysql
-	- composer
-	- git
+- docker
+- mysql
+- composer
+- git
 
 #### 2. Installation
 ##### 1. Git
-	```sudo apt-get install git```
-	- or you can get it by step [here]: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git (Here)
+`
+sudo apt-get install git
+`
+- or you can get it by step [here]: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git (Here)
 ##### 2. Docker 
 	- [Here]: https://docs.docker.com/engine/installation/linux/ubuntulinux/ (Here)
 	- o
