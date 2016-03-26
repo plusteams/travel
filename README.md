@@ -19,10 +19,10 @@ This working well in linux system. You can get it in Mac OS (window need to be v
 
 #### 2. Installation
 ##### 1. Git
-	<code sudo apt-get install git>
-	* or you can get it by step [here]: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git (Here)
+	```sudo apt-get install git```
+	- or you can get it by step [here]: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git (Here)
 ##### 2. Docker 
-	* [Here]: https://docs.docker.com/engine/installation/linux/ubuntulinux/ (Here)
+	- [Here]: https://docs.docker.com/engine/installation/linux/ubuntulinux/ (Here)
 	- o
 
 
