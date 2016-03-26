@@ -8,7 +8,6 @@ class DefaultController extends Controller
 {
     public function indexAction()
     {
-        $this->render();
         return $this->render('PointBundle:Default:index.html.twig');
     }
 }

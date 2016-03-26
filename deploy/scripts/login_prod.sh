@@ -16,7 +16,12 @@ if [ /travel/wwww/travel ]; then
 fi
 cd travel;
 sudo git checkout master;
-sudo git pull;
-sudo chmod a+x deploy/scripts/deploy.sh
-sudo deploy/scripts/deploy.sh nginx
+#checkout source code
+#sudo git checkout dev;
+#pull images docker 
+sudo docker pull plusteams/xxxx
+#sudo docker restart $(sudo docker -a -q)
+#sudo git pull;
+#sudo chmod a+x deploy/scripts/deploy.sh
+#sudo deploy/scripts/deploy.sh nginx
 EOF
