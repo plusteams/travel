@@ -22,6 +22,7 @@ machine:
     Asia/Ho_Chi_Minh
   environment:
   services:
+    - nginx
     - mysql
     - mongodb
     #- redis
@@ -65,7 +66,7 @@ test:
 deployment:
   staging:
     branch: dev
-    commands: 
+    commands:
       - deploy/scripts/login_dev.sh
       #- ssh -i identity_files/key.pem $USER@$HOST sudo deploy/scripts/login.sh
   production:

@@ -21,16 +21,6 @@ COPY deploy/scripts/files/config/nginx/nginx.conf /etc/nginx/nginx.conf
 RUN service nginx restart
 
 # install php7 
-
-RUN apt-get -y install git
-
-RUN git clone https://github.com/php/php-src.git 
-
-#RUN 
-RUN git config --global user.email "hieunguyenminh.93@gmail.com"
-RUN git config --global user.name "Nguyen Minh Hieu"
-RUN cd php-src && git checkout PHP-7.0.4 && git pull
-
 RUN apt-get -y install locales \
       language-pack-de \
       re2c \
@@ -50,18 +40,33 @@ RUN apt-get -y install locales \
       libtool \
       re2c \
       flex \
-      bison
-RUN apt-get -y install make
-RUN apt-get -y install libxml2-dev
-RUN apt-get -y install libssl-dev
-RUN apt-get -y install build-essential
-RUN apt-get -y install zlib1g-dev
-RUN apt-get -y install libbz2-dev
-RUN apt-get -y install  libcurl4-openssl-dev libcurl3 libcurlpp-dev libjpeg-dev libpng12-dev
-RUN apt-get -y install libwebp-dev libfreetype6-dev
-RUN apt-get -y install libgmp-dev libpqxx-dev libpq-dev
-RUN apt-get -y install libreadline-dev
-RUN apt-get -y install libxslt1-dev
+      bison \
+      git \
+      make \
+      libxml2-dev \
+      libssl-dev \
+      build-essential \
+      zlib1g-dev \
+      libbz2-dev \
+      libcurl4-openssl-dev \
+      libcurl3 \
+      libcurlpp-dev \
+      libjpeg-dev \
+      libpng12-dev \
+      libwebp-dev \
+      libfreetype6-dev \
+      libgmp-dev \
+      libpqxx-dev \
+      libpq-dev \
+      libreadline-dev \
+      libxslt1-dev 
+
+RUN git clone https://github.com/php/php-src.git 
+
+#RUN 
+RUN git config --global user.email "hieunguyenminh.93@gmail.com"
+RUN git config --global user.name "Nguyen Minh Hieu"
+RUN cd php-src && git checkout PHP-7.0.4 && git pull
 COPY deploy/scripts/compile-php.sh /php-src/compile-php.sh
 RUN chmod a+x /php-src/compile-php.sh
 RUN cd /php-src && ./compile-php.sh
@@ -72,9 +77,13 @@ RUN cd /php-src && ./compile-php.sh
 
 COPY deploy/scripts/files/config/nginx/vhost/server-*.conf /etc/nginx/sites-availables/
 RUN ln -s /etc/nginx/sites-availables/server-dev.conf /etc/nginx/sites-enabled/server-dev.conf
+
+RUN ln -s /etc/nginx/sites-availables/server-prod.conf /etc/nginx/sites-enabled/server-prod.conf
+
 COPY deploy/scripts/files/config/php/fpm/php-fpm.conf /usr/local/etc/php-fpm.conf
 RUN /usr/local/sbin/php-fpm
 RUN service nginx restart
+# build mysql
 ADD deploy/scripts/start.sh /start.sh
 RUN chmod a+x /start.sh
 EXPOSE 80 443
