@@ -1,3 +1,7 @@
+point:
+    resource: "@PointBundle/Resources/config/routing.yml"
+    prefix:   /
+
 app:
     resource: "@AppBundle/Controller/"
     type:     annotation
