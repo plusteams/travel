@@ -19,6 +19,7 @@ cd travel_dev;
 sudo git checkout dev;
 #pull images docker 
 sudo docker pull plusteam/xxxx
+sudo docker restart $(sudo docker -a -q)
 #sudo docker restart $(sudo docker -a -q)
 #sudo git pull;
 #sudo chmod a+x deploy/scripts/deploy.sh
