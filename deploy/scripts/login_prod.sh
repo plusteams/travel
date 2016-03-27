@@ -15,14 +15,10 @@ if [ /travel/wwww/travel ]; then
 	sudo git clone git@github.com:plusteams/travel.git travel;
 fi
 cd travel;
-sudo git checkout master;
-sudo git pull;
-#checkout source code
-#sudo git checkout dev;
-#pull images docker 
+sudo git checkout master
+sudo git pull
 sudo docker pull plusteam/xxxx
 sudo docker restart $(sudo docker ps -a -q)
-#sudo docker restart $(sudo docker -a -q)
 #sudo git pull;
 #sudo chmod a+x deploy/scripts/deploy.sh
 #sudo deploy/scripts/deploy.sh nginx
