@@ -16,6 +16,7 @@ if [ /travel/wwww/travel ]; then
 fi
 cd travel;
 sudo git checkout master;
+sudo git pull;
 #checkout source code
 #sudo git checkout dev;
 #pull images docker 
